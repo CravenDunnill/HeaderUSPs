@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+		<add id="CravenDunnill_HeaderUSPs::usps" title="Header USP Ticker" module="CravenDunnill_HeaderUSPs" sortOrder="100" parent="Magento_Backend::content" resource="CravenDunnill_HeaderUSPs::usps"/>
+		<add id="CravenDunnill_HeaderUSPs::usp_manage" title="Manage Header USPs" module="CravenDunnill_HeaderUSPs" sortOrder="10" parent="CravenDunnill_HeaderUSPs::usps" action="cravendunnill_headerusps/usp/index" resource="CravenDunnill_HeaderUSPs::usp_manage"/>
+	</menu>
+</config>

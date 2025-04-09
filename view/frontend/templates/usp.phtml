@@ -1,0 +1,126 @@
+<?php
+/**
+ * @var \CravenDunnill\HeaderUSPs\Block\Usp $block
+ */
+$usps = $block->getUsps();
+if (empty($usps)) {
+	return; // Don't show anything if no USPs available
+}
+
+// Get defaults for the first slide
+$firstUsp = reset($usps);
+$firstBg = $firstUsp->getBackgroundColor() ?: $block->getDefaultBackgroundColor();
+$firstColor = $firstUsp->getTextColor() ?: $block->getDefaultTextColor();
+$firstHoverBg = $firstUsp->getHoverBackgroundColor() ?: $block->getDefaultHoverBackgroundColor();
+?>
+
+<!-- Super simple ticker with guaranteed visibility -->
+<div id="cravendunnill-headerusps-ticker" class="cravendunnill-headerusps-ticker" style="background-color: <?= $firstBg ?>; color: <?= $firstColor ?>;">
+	<div class="cravendunnill-headerusps-container">
+		<?php foreach ($usps as $index => $usp): ?>
+			<div class="cravendunnill-usp-slide" style="<?= $index === 0 ? 'display: block;' : 'display: none;' ?>"
+				 data-bg="<?= $block->escapeHtmlAttr($usp->getBackgroundColor() ?: $block->getDefaultBackgroundColor()) ?>"
+				 data-hover-bg="<?= $block->escapeHtmlAttr($usp->getHoverBackgroundColor() ?: $block->getDefaultHoverBackgroundColor()) ?>"
+				 data-color="<?= $block->escapeHtmlAttr($usp->getTextColor() ?: $block->getDefaultTextColor()) ?>">
+				<?php if ($usp->getUrl()): ?>
+					<a href="<?= $block->escapeUrl($usp->getUrl()) ?>" class="usp-link"><?= /* @noEscape */ $usp->getContent() ?></a>
+				<?php else: ?>
+					<span><?= /* @noEscape */ $usp->getContent() ?></span>
+				<?php endif; ?>
+			</div>
+		<?php endforeach; ?>
+	</div>
+</div>
+
+<!-- Simple, reliable styles -->
+<style>
+/* Basic ticker styling */
+.cravendunnill-headerusps-ticker {
+	width: 100%;
+	padding: 10px 0;
+	text-align: center;
+	transition: background-color 0.5s ease, color 0.5s ease;
+}
+/* Container for consistent height */
+.cravendunnill-headerusps-container {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 20px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+/* Link styling with hover animation */
+.usp-link {
+	color: inherit;
+	text-decoration: none;
+	position: relative;
+	padding-bottom: 2px;
+}
+.usp-link::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	height: 1px;
+	background-color: currentColor;
+	transition: width 0.3s ease;
+}
+.usp-link:hover::after {
+	width: 100%;
+}
+</style>
+
+<!-- Simple, guaranteed rotation logic -->
+<script>
+require(['jquery'], function($) {
+	// Run immediately when DOM is ready
+	$(document).ready(function() {
+		var ticker = $('#cravendunnill-headerusps-ticker');
+		var slides = $('.cravendunnill-usp-slide');
+		
+		// Exit if only one slide
+		if (slides.length <= 1) return;
+		
+		// Add hover style for first slide
+		var firstSlide = $(slides[0]);
+		var firstHoverBg = firstSlide.data('hover-bg');
+		
+		$('<style id="usp-hover-style">')
+			.html('#cravendunnill-headerusps-ticker:hover { background-color: ' + firstHoverBg + ' !important; }')
+			.appendTo('head');
+		
+		var currentIndex = 0;
+		var interval = 5000; // 5 seconds
+		
+		// Set up rotation
+		setInterval(function() {
+			// Hide current slide
+			$(slides[currentIndex]).hide();
+			
+			// Calculate next slide index
+			currentIndex = (currentIndex + 1) % slides.length;
+			
+			// Get next slide and its data
+			var nextSlide = $(slides[currentIndex]);
+			var bg = nextSlide.data('bg');
+			var color = nextSlide.data('color');
+			var hoverBg = nextSlide.data('hover-bg');
+			
+			// Update styles
+			ticker.css({
+				'background-color': bg,
+				'color': color
+			});
+			
+			// Update hover style
+			$('#usp-hover-style').html('#cravendunnill-headerusps-ticker:hover { background-color: ' + hoverBg + ' !important; }');
+			
+			// Show next slide
+			nextSlide.show();
+		}, interval);
+	});
+});
+</script>

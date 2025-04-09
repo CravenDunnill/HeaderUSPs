@@ -1,0 +1,65 @@
+& when (@media-common = true) {
+	.cravendunnill-headerusps-ticker {
+		width: 100%;
+		padding: 10px 0;
+		text-align: center;
+		transition: background-color 0.3s ease;
+		background-color: #122C58;
+		color: #FFFFFF;
+		
+		.cravendunnill-headerusps-container {
+			max-width: 1280px;
+			margin: 0 auto;
+			padding: 0 20px;
+			height: 24px; // Fixed height to prevent jumping
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.cravendunnill-usp-link {
+			position: relative;
+			display: inline-block;
+			text-decoration: none;
+			padding-bottom: 2px;
+			transition: all 0.3s ease;
+			
+			&::after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 0;
+				height: 1px;
+				transition: width 0.3s ease;
+			}
+			
+			&:hover::after {
+				animation: underlineAnimation 0.5s ease forwards;
+			}
+		}
+	}
+	
+	@keyframes underlineAnimation {
+		0% {
+			width: 0;
+			left: 0;
+		}
+		100% {
+			width: 100%;
+			left: 0;
+		}
+	}
+	
+	// Animation for fade out
+	@keyframes fadeOut {
+		from { opacity: 1; }
+		to { opacity: 0; }
+	}
+	
+	// Animation for fade in
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+}
