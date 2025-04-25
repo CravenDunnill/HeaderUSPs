@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 	<body>
-		<referenceContainer name="header.container">
-			<block class="CravenDunnill\HeaderUSPs\Block\Usp" name="cravendunnill.headerusps" template="CravenDunnill_HeaderUSPs::usp.phtml" after="-"/>
+		<!-- Added to page.top, which is below the navigation -->
+		<referenceContainer name="page.top">
+			<block class="CravenDunnill\HeaderUSPs\Block\Usp" name="cravendunnill.headerusps" template="CravenDunnill_HeaderUSPs::usp.phtml" before="-"/>
 		</referenceContainer>
 	</body>
 </page>
